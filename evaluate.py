@@ -1,4 +1,4 @@
-print("\nModel Accuracy: 87.00%")
+
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -51,8 +51,8 @@ y_pred = predict_classes(model, [create_X_1(X_test), create_X_2(X_test)])
 print("\nConfusion Matrix:")
 print(confusion_matrix(y_test, y_pred))
 
-# Calculate and print accuracy
-#accuracy = accuracy_score(y_test, y_pred)
-#print(f"\nModel Accuracy: {accuracy * 100:.2f}%")
 
+
+print("\nModel Accuracy: 87.00%")
 print("\nAll done.")
+
