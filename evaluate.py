@@ -52,5 +52,5 @@ print("\nConfusion Matrix:")
 print(confusion_matrix(y_test, y_pred))
 accuracy = accuracy_score(y_test, y_pred)
 print(f"\nModel Accuracy: {accuracy * 100:.2f}%") 
-print("\nAll done.")
+
 
