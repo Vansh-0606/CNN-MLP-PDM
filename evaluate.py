@@ -1,73 +1,35 @@
 import numpy as np
 import pandas as pd
-import re, os, time
+import tensorflow as tf
 from string import printable
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, confusion_matrix
-import numpy as np
-import pandas as pd
-import tensorflow as tf
 from tensorflow.keras.layers import Conv1D, MaxPooling1D, Dense, Flatten, Dropout
-from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import sequence
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score, confusion_matrix
-import tensorflow as tf
-from keras.layers import *
-from keras import backend as K
-from keras.optimizers import Adam
-from tensorflow.keras import layers
-from tensorflow.keras.preprocessing import sequence
-from keras.models import Sequential, Model, load_model
-from keras.callbacks import EarlyStopping, ModelCheckpoint
-from keras.layers import Conv1D, MaxPooling1D
-from keras.layers.core import Dense, Dropout, Activation, Lambda, Flatten
 
 def create_scaler(df):
     # Apply standard scaler
-    html_len = df[['html_length']].values.astype(float)
-    n_hyperlinks = df[['n_hyperlinks']].values.astype(float)
-    n_script_tag = df[['n_script_tag']].values.astype(float)
-    n_link_tag = df[['n_link_tag']].values.astype(float)
-    n_comment_tag = df[['n_comment_tag']].values.astype(float)
-
     scaler = StandardScaler()
-    html_len_scaled = scaler.fit_transform(html_len)
-    n_hyperlinks_scaled = scaler.fit_transform(n_hyperlinks)
-    n_script_tag_scaled = scaler.fit_transform(n_script_tag)
-    n_link_tag_scaled = scaler.fit_transform(n_link_tag)
-    n_comment_tag_scaled = scaler.fit_transform(n_comment_tag)
+    scaled_features = ['html_length', 'n_hyperlinks', 'n_script_tag', 'n_link_tag', 'n_comment_tag']
+    
+    for feature in scaled_features:
+        df[f"{feature}_std"] = scaler.fit_transform(df[[feature]].values.astype(float))
 
-    # Remove original columns and add scaled columns
-    df = pd.concat([df.drop(columns=['html_length', 'n_hyperlinks', 'n_script_tag', 'n_link_tag', 'n_comment_tag']),
-                    pd.DataFrame(html_len_scaled, columns=['html_length_std']),
-                    pd.DataFrame(n_hyperlinks_scaled, columns=['n_hyperlinks_std']),
-                    pd.DataFrame(n_script_tag_scaled, columns=['n_script_tag_std']),
-                    pd.DataFrame(n_link_tag_scaled, columns=['n_link_tag_std']),
-                    pd.DataFrame(n_comment_tag_scaled, columns=['n_comment_tag_std'])], axis=1, join='inner')
-
+    df = df.drop(columns=scaled_features)  # Remove original columns
     return df
 
 def create_X_1(temp_X_1):
     url_int_tokens = [[printable.index(x) + 1 for x in url if x in printable] for url in temp_X_1.url]
-    max_len = 150
-    X_new_1 = sequence.pad_sequences(url_int_tokens, maxlen=max_len)
-    return X_new_1
+    return sequence.pad_sequences(url_int_tokens, maxlen=150)
 
 def create_X_2(temp_X_2):
-    # Input variables
     x = temp_X_2.drop(columns=['url']).values.astype(float)
-
-    # Reshape input
-    X_new_2 = x.reshape(x.shape[0], x.shape[1], 1)
-    return X_new_2
+    return x.reshape(x.shape[0], x.shape[1], 1)
 
 def predict_classes(model, x):
     proba = model.predict(x)
-    if proba.shape[-1] > 1:
-        return proba.argmax(axis=-1)
-    else:
-        return (proba > 0.5).astype('int32')
+    return proba.argmax(axis=-1) if proba.shape[-1] > 1 else (proba > 0.5).astype('int32')
 
 # Load test data
 legitimate_test = pd.read_csv('features/legitimate_test.csv')
