@@ -50,9 +50,7 @@ y_pred = predict_classes(model, [create_X_1(X_test), create_X_2(X_test)])
 # Print confusion matrix
 print("\nConfusion Matrix:")
 print(confusion_matrix(y_test, y_pred))
-
-
-
-print("\nModel Accuracy: 87.00%")
+accuracy = accuracy_score(y_test, y_pred)
+print(f"\nModel Accuracy: {accuracy * 100:.2f}%") 
 print("\nAll done.")
 
