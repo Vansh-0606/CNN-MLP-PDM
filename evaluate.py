@@ -17,7 +17,7 @@ from keras.layers.convolutional import Conv1D, MaxPooling1D
 from keras.layers.core import Dense, Dropout, Activation, Lambda, Flatten
 
 def create_scaler(df):
-    # apply standard scaler
+    # Apply standard scaler
     html_len = df[['html_length']].values.astype(float)
     n_hyperlinks = df[['n_hyperlinks']].values.astype(float)
     n_script_tag = df[['n_script_tag']].values.astype(float)
@@ -31,8 +31,8 @@ def create_scaler(df):
     n_link_tag_scaled = scaler.fit_transform(n_link_tag)
     n_comment_tag_scaled = scaler.fit_transform(n_comment_tag)
 
-    # remove column and add to data frame
-    df = pd.concat([df.drop(columns=['html_length','n_hyperlinks','n_script_tag','n_link_tag','n_comment_tag']),
+    # Remove original columns and add scaled columns
+    df = pd.concat([df.drop(columns=['html_length', 'n_hyperlinks', 'n_script_tag', 'n_link_tag', 'n_comment_tag']),
                     pd.DataFrame(html_len_scaled, columns=['html_length_std']),
                     pd.DataFrame(n_hyperlinks_scaled, columns=['n_hyperlinks_std']),
                     pd.DataFrame(n_script_tag_scaled, columns=['n_script_tag_std']),
@@ -43,15 +43,15 @@ def create_scaler(df):
 
 def create_X_1(temp_X_1):
     url_int_tokens = [[printable.index(x) + 1 for x in url if x in printable] for url in temp_X_1.url]
-    max_len=150
+    max_len = 150
     X_new_1 = sequence.pad_sequences(url_int_tokens, maxlen=max_len)
     return X_new_1
 
 def create_X_2(temp_X_2):
-    # input (x) variables
+    # Input variables
     x = temp_X_2.drop(columns=['url']).values.astype(float)
 
-    # reshape input (x)
+    # Reshape input
     X_new_2 = x.reshape(x.shape[0], x.shape[1], 1)
     return X_new_2
 
@@ -62,25 +62,25 @@ def predict_classes(model, x):
     else:
         return (proba > 0.5).astype('int32')
 
-# data load
+# Load test data
 legitimate_test = pd.read_csv('features/legitimate_test.csv')
 phish_test = pd.read_csv('features/phish_test.csv')
 
 test = create_scaler(pd.concat([legitimate_test, phish_test], axis=0)).sample(frac=1).reset_index(drop=True)
 X_test, y_test = test.drop(columns=['result_flag']), test.result_flag
-print(y_test)
 
-# load the saved model
+# Load the saved model
 model = load_model('models/model_C.h5')
 
-# evalaute model performance
-y_pred = predict_classes(model, [create_X_1(X_test),create_X_2(X_test)])
+# Evaluate model performance
+y_pred = predict_classes(model, [create_X_1(X_test), create_X_2(X_test)])
+
+# Print confusion matrix
+print("\nConfusion Matrix:")
 print(confusion_matrix(y_test, y_pred))
 
-
-# Calculate accuracy
+# Calculate and print accuracy
 accuracy = accuracy_score(y_test, y_pred)
-print(f"Model Accuracy: {accuracy:.2f}")
+print(f"\nModel Accuracy: {accuracy * 100:.2f}%")
 
-
-print("All done.")
+print("\nAll done.")
