@@ -13,7 +13,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.preprocessing import sequence
 from keras.models import Sequential, Model, load_model
 from keras.callbacks import EarlyStopping, ModelCheckpoint
-from keras.layers.convolutional import Conv1D, MaxPooling1D
+from keras.layers import Conv1D, MaxPooling1D
 from keras.layers.core import Dense, Dropout, Activation, Lambda, Flatten
 
 def create_scaler(df):
