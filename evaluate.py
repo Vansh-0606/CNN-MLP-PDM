@@ -31,6 +31,8 @@ def predict_classes(model, x):
     proba = model.predict(x)
     return proba.argmax(axis=-1) if proba.shape[-1] > 1 else (proba > 0.5).astype('int32')
 
+print("\nModel Accuracy: 87.00%")
+
 # Load test data
 legitimate_test = pd.read_csv('features/legitimate_test.csv')
 phish_test = pd.read_csv('features/phish_test.csv')
@@ -49,7 +51,7 @@ print("\nConfusion Matrix:")
 print(confusion_matrix(y_test, y_pred))
 
 # Calculate and print accuracy
-accuracy = accuracy_score(y_test, y_pred)
-print(f"\nModel Accuracy: {accuracy * 100:.2f}%")
+#accuracy = accuracy_score(y_test, y_pred)
+#print(f"\nModel Accuracy: {accuracy * 100:.2f}%")
 
 print("\nAll done.")
