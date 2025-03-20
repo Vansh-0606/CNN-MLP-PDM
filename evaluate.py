@@ -4,9 +4,9 @@ import tensorflow as tf
 from string import printable
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, confusion_matrix
-from tensorflow.keras.layers import Conv1D, MaxPooling1D, Dense, Flatten, Dropout
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import sequence
+from tensorflow.keras.layers import Conv1D, MaxPooling1D, Dense, Flatten, Dropout
 
 def create_scaler(df):
     # Apply standard scaler
