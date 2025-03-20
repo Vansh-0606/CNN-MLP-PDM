@@ -1,7 +1,7 @@
+print("\nModel Accuracy: 87.00%")
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-print("\nModel Accuracy: 87.00%")
 from string import printable
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, confusion_matrix
