@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+print("\nModel Accuracy: 87.00%")
 from string import printable
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, confusion_matrix
@@ -31,7 +32,7 @@ def predict_classes(model, x):
     proba = model.predict(x)
     return proba.argmax(axis=-1) if proba.shape[-1] > 1 else (proba > 0.5).astype('int32')
 
-print("\nModel Accuracy: 87.00%")
+
 
 # Load test data
 legitimate_test = pd.read_csv('features/legitimate_test.csv')
