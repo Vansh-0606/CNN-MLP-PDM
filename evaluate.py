@@ -4,7 +4,14 @@ import re, os, time
 from string import printable
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, confusion_matrix
-
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from tensorflow.keras.layers import Conv1D, MaxPooling1D, Dense, Flatten, Dropout
+from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.preprocessing import sequence
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, confusion_matrix
 import tensorflow as tf
 from keras.layers import *
 from keras import backend as K
