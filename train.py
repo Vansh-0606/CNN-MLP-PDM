@@ -55,10 +55,10 @@ X_train, y_train = train.drop(columns=['result_flag']), train.result_flag
 X_test, y_test = test.drop(columns=['result_flag']), test.result_flag
 
 # Load sub-models
-model_A = load_model('models/model_A.h5')
+model_A = load_model('models/model_A.h5', compile=False)
 model_A = Model(inputs=model_A.inputs, outputs=model_A.layers[-2].output)
 
-model_B = load_model('models/model_B.h5')
+model_B = load_model('models/model_B.h5', compile=False)
 model_B = Model(inputs=model_B.inputs, outputs=model_B.layers[-2].output)
 
 # Early stopping & model checkpoint
