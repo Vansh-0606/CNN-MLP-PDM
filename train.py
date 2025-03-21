@@ -67,7 +67,7 @@ mc = ModelCheckpoint('models/tmp_model.h5', monitor='val_loss', mode='min', verb
 
 # Create and train model
 model = construct_model()
-history = model.fit([create_X_1(X_train), create_X_2(X_train)], y_train, validation_split=0.1, epochs=500, batch_size=64, verbose=1, callbacks=[es, mc])
+history = model.fit([create_X_1(X_train), create_X_2(X_train)], y_train, validation_split=0.1, epochs=10, batch_size=64, verbose=1, callbacks=[es, mc])
 
 # Save training history
 with open("train_history.pkl", "wb") as f:
