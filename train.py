@@ -1,21 +1,17 @@
 import numpy as np
 import pandas as pd
-import re, os, time
+import os
 from string import printable
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, confusion_matrix
+import pickle
 
 import tensorflow as tf
-from keras.layers import *
-from keras import backend as K
-from keras.optimizers import Adam
-from tensorflow.keras import layers
+from tensorflow.keras.models import Model, load_model
+from tensorflow.keras.layers import Add, Dense, Dropout, Conv1D, MaxPooling1D, Flatten, Input
 from tensorflow.keras.preprocessing import sequence
-from keras.models import Sequential, Model, load_model
-from keras.callbacks import EarlyStopping, ModelCheckpoint
-from keras.layers.convolutional import Conv1D, MaxPooling1D
-from keras.layers.core import Dense, Dropout, Activation, Lambda, Flatten
-import pickle
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
 def create_scaler(df):
     scaler = StandardScaler()
