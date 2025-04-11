@@ -25,8 +25,23 @@ def create_X_1(temp_X_1):
     return sequence.pad_sequences(url_int_tokens, maxlen=150)
 
 def create_X_2(temp_X_2):
+    print("[DEBUG] Columns before dropping 'url':", list(temp_X_2.columns))
+    
     x = temp_X_2.drop(columns=['url']).values.astype(float)
-    return x.reshape(x.shape[0], x.shape[1], 1)
+
+    print("[DEBUG] Shape before reshape:", x.shape)  # Should be (N, 15)
+
+    # Add safeguard: clip or pad to exactly 15 features
+    if x.shape[1] < 15:
+        padding = np.zeros((x.shape[0], 15 - x.shape[1]))
+        x = np.hstack((x, padding))
+        print("[DEBUG] Applied padding to 15 features.")
+    elif x.shape[1] > 15:
+        x = x[:, :15]
+        print("[DEBUG] Trimmed to 15 features.")
+
+    print("[DEBUG] Final shape (before reshape):", x.shape)
+    return x.reshape(x.shape[0], 15, 1)
 
 def predict_classes(model, x):
     proba = model.predict(x)
